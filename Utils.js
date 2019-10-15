@@ -1,8 +1,9 @@
+var zw = {}
 /*
 *	json转tree
 *	param：{data:json数据，parentId:父Id}
 */
-function json2tree (data, parentId) {
+zw.json2tree = function(data, parentId) {
 	let tree = [];
 	for (let i = 0; i < data.length; i++) {
 		let node = data[i];
@@ -16,4 +17,22 @@ function json2tree (data, parentId) {
 		}
 	}
 	return tree;
+}
+/**
+ * 深拷贝
+ */
+zw.deepCopy = function(from,to={}){
+	let temp = to
+	for(let key in from){
+		if(typeof from[key] === 'object'){
+			temp[key] = new (from[key].constructor)()
+			zw.deepCopy(from[key],temp[key])
+		}else{
+			temp[key] = from[key]
+		}
+	}
+	return temp
+}
+zw.simpleDeepCopy = function(data){
+	return JSON.parse(JSON.stringify(data));
 }
