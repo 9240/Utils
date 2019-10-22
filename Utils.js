@@ -36,3 +36,23 @@ zw.deepCopy = function(from,to={}){
 zw.simpleDeepCopy = function(data){
 	return JSON.parse(JSON.stringify(data));
 }
+/**
+ * jsonp封装 GET
+ */
+zw.jsonp = function({url,params,cb}){
+	return new Promise((resolve,reject)=>{
+		let script = document.createElement('script');
+		window[cb] = function(data){
+			resolve(data)
+			document.body.removeChild(script)
+		}
+		params = {...params,cb}
+		let arr = [];
+		for (const key in params) {
+			arr.push(`${key}=${params[key]}`)
+		}
+		
+		script.src = `${url}?${arr.join('&')}`
+		document.body.appendChild(script)
+	})
+}
